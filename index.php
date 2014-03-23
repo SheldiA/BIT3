@@ -8,13 +8,27 @@
     include 'appearance.html';
     $dirSize = 0;
     $imageSize = 0;
-    $path = 'D:/bit3';
-    var_dump(file_exists($path));
-    DirectoryTraversal($path);
-    var_dump("Directory size  = $dirSize ");
-    var_dump("Image size = $imageSize ");
-    $percentage = $imageSize / $dirSize;
-    var_dump("Percentage = $percentage");
+    $path = $_POST['directoryPath'];
+    if(file_exists($path))
+    {
+        DirectoryTraversal($path);
+        if($imageSize != 0)
+        {
+            $percentage = $imageSize / $dirSize;
+            echo("Percentage = $percentage");
+        }
+        else
+        {
+            echo "This directory doesn't have image files";
+        }
+    }
+    else
+    {
+        echo "Enter correct directory!";
+    }
+    //var_dump("Directory size  = $dirSize ");
+    //var_dump("Image size = $imageSize ");
+
 
     function DirectoryTraversal($dirName)
     {
@@ -24,7 +38,6 @@
         {
             while(FALSE !== ($file = readdir($handle)))
             {
-                echo("$file\n");
                 if(is_file("$dirName/$file"))
                 {
                     $type = finfo_file($finfo,"$dirName/$file");
@@ -39,5 +52,6 @@
             }
         }
         closedir($handle);
+        finfo_close($finfo);
     }
 ?>
